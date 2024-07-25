@@ -1,0 +1,78 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+.carousel-container {
+  width: 100%;
+  margin: auto;
+  border: 4px solid rgb(92, 91, 91);
+  overflow: hidden;
+  position: relative;
+}
+.carousel-images {
+  display: flex;
+  transition: 0.5s all, ease-in-out;
+}
+.carousel-img {
+  display: block;
+  width: 100%;
+}
+.controls {
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 1;
+}
+.btn {
+  padding: 20px 25px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+/* .animaStepImage {
+  transition: 0.5s all, ease-in-out;
+} */
+.carousel-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.indicator {
+  width: 50px;
+  height: 4px;
+  background-color: rgb(218, 218, 218);
+  margin: 0 5px;
+  cursor: pointer;
+}
+.active {
+  background-color: rgb(92, 91, 91);
+}
+.pause-slide,
+.play-slide {
+  width:100px;
+  background-color: rgb(92, 91, 91);
+  color: white;
+  text-transform: uppercase;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+}
