@@ -10,9 +10,9 @@ let counter = 0;
 const step = images[0].clientWidth;
 
 let slideInterval = null;
-let isPause = true;
 const intervalTime = 3000;
 
+// оновлюю слайдер і індикатори
 function updateSlider() {
   if (counter < 0) {
     counter = images.length - 1;
@@ -20,54 +20,56 @@ function updateSlider() {
     counter = 0;
   }
   slider.style.transform = `translateX(${-step * counter}px)`;
+  updateIndicators();
+}
+updateSlider();
+
+//привязка індикаторів
+function updateIndicators() {
+  indicators.forEach((indicator, index) => {
+    indicator.classList.toggle("active", index === counter);
+    indicator.addEventListener("click", () => goToSlide(index));
+  });
 }
 
+//  наступний слайд
 function showNextSlide() {
   counter++;
   updateSlider();
   updateIndicators();
   // console.log(slider);
 }
+nextSlide.addEventListener("click", showNextSlide);
+
+// попередній слайд
 function showPrevSlide() {
   counter--;
   updateSlider();
   updateIndicators();
   // console.log(slider);
 }
-
 prevSlide.addEventListener("click", showPrevSlide);
-nextSlide.addEventListener("click", showNextSlide);
 
-//привязка індикаторів
-function updateIndicators() {
-  indicators.forEach((indicator, index) => {
-    if (index === counter) {
-      indicator.classList.add("active");
-    } else {
-      indicator.classList.remove("active");
-    }
-    indicator.addEventListener("click", () => {
-      counter = index;
-      updateSlider();
-      updateIndicators();
-    });
-  });
+// перехід до конкретного слайду через індикатор
+function goToSlide(index) {
+  counter = index;
+  updateSlider();
 }
 
 //старт
 function startSlide() {
-  if (isPause) {
+  if (!slideInterval) {
     slideInterval = setInterval(showNextSlide, intervalTime);
-    isPause = false;
   }
 }
 playButton.addEventListener("click", startSlide);
+startSlide();
 
 //пауза
 function pauseSlide() {
-  if (!isPause) {
+  if (slideInterval) {
     clearInterval(slideInterval);
-    isPause = true;
+    slideInterval = null;
   }
 }
 pauseButton.addEventListener("click", pauseSlide);
@@ -82,35 +84,34 @@ document.addEventListener("keydown", function (event) {
 });
 
 //тач
-let touchStart = 0;
-let touchEnd = 0;
+let startPosition = 0;
+const positionTouch = (endPosition) => {
+  if (endPosition < startPosition) {
+    showNextSlide();
+  } else if (endPosition > startPosition) {
+    showPrevSlide();
+  }
+};
 
 slider.addEventListener("touchstart", (event) => {
-  touchStart = event.touches[0].clientX;
+  startPosition = event.touches[0].clientX;
   // console.log(event);
 });
 
-slider.addEventListener("touchend", () => {
-  if (touchEnd < touchStart) {
-    showNextSlide();
-  } else if (touchEnd > touchStart) {
-    showPrevSlide();
-  }
+slider.addEventListener("touchend", (event) => {
+  positionTouch(event.changedTouches[0].clientX);
 });
 
 //миша
-let mouseStart = 0;
-let mouseEnd = 0;
-
 slider.addEventListener("mousedown", (event) => {
-  mouseStart = event.clientX;
+  startPosition = event.clientX;
   // console.log(event);
 });
 
-slider.addEventListener("mouseup", () => {
-  if (mouseEnd < mouseStart) {
-    showNextSlide();
-  } else if (mouseEnd > mouseStart) {
-    showPrevSlide();
-  }
+slider.addEventListener("mouseup", (event) => {
+  positionTouch(event.clientX);
 });
+
+
+
+
